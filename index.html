@@ -5,153 +5,202 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
 <title>Horas Fora da Operação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #020617;
-    --panel: #0f172a;
-    --border: #1e293b;
-    --orange: #fb923c;
-    --blue: #38bdf8;
-    --green: #22c55e;
-    --amber: #f59e0b;
-    --red: #f87171;
-    --text: #cbd5e1;
-    --muted: #94a3b8;
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --surface-alt: #eef1f4;
+    --border: #dde3e9;
+    --text: #12202e;
+    --text-secondary: #52667a;
+    --text-muted: #8496a8;
+    --blue: #2F5D8C;
+    --green: #1f9d55;
+    --amber: #d68a12;
+    --red: #d64545;
+    --shadow: 0 1px 2px rgba(18,32,46,0.06), 0 8px 24px rgba(18,32,46,0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1420; --surface: #101c2b; --surface-alt: #16283b; --border: #223247;
+      --text: #eaf1f8; --text-secondary: #9fb2c4; --text-muted: #6f8296;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1420; --surface: #101c2b; --surface-alt: #16283b; --border: #223247;
+    --text: #eaf1f8; --text-secondary: #9fb2c4; --text-muted: #6f8296;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: #fff; font-family: Arial, sans-serif; padding: 30px 34px; }
-  h1 { margin: 0 0 4px; font-size: 26px; color: var(--orange); }
-  h2 { margin: 0 0 4px; font-size: 17px; color: #fff; }
-  p.sub { margin: 0; color: var(--muted); font-size: 14px; }
-  .filterbar { position: sticky; top: 0; z-index: 100; background: var(--bg); padding: 10px 0 16px; margin-bottom: 24px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
-  .filtergroup { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .filtergroup .lbl { color: var(--muted); font-size: 12px; margin-right: 2px; }
-  .filterrow { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
-  .chip { display: inline-block; border-radius: 999px; padding: 6px 14px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; border: 1px solid var(--border); background: var(--panel); color: var(--text); margin: 2px; }
-  .chip.active-orange { background: var(--orange); color: var(--bg); border-color: var(--orange); }
-  .chip.active-blue { background: var(--blue); color: var(--bg); border-color: var(--blue); }
-  .chip.active-green { background: var(--green); color: var(--bg); border-color: var(--green); }
-  .chip.active-amber { background: var(--amber); color: var(--bg); border-color: var(--amber); }
-  #search { background: var(--panel); border: 1px solid var(--border); border-radius: 999px; padding: 9px 16px; color: #fff; font-size: 13px; min-width: 220px; }
-  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 28px; }
-  .kpi { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; }
-  .kpi .lbl { margin: 0 0 8px; color: var(--muted); font-size: 12px; }
-  .kpi .val { margin: 0; font-size: 26px; font-weight: bold; }
-  .panel { background: var(--bg); border: 1px solid var(--border); border-radius: 22px; padding: 22px; margin-bottom: 22px; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  h1, h2, .brand { font-family: 'Archivo', 'IBM Plex Sans', sans-serif; }
+  .mono { font-family: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace; }
+
+  header.top {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 16px 28px; background: var(--surface); border-bottom: 1px solid var(--border);
+  }
+  .brand { font-weight: 800; font-size: 18px; color: var(--blue); }
+  .brand small { display: block; font-weight: 500; font-size: 11px; color: var(--text-muted); font-family: 'IBM Plex Sans'; letter-spacing: .4px; }
+  .icon-btn { border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); border-radius: 8px; padding: 7px 10px; cursor: pointer; font-size: 13px; font-family: inherit; }
+
+  main { max-width: 1360px; margin: 0 auto; padding: 24px 28px 60px; }
+
+  .hero { margin-bottom: 20px; }
+  .hero p.eyebrow { color: var(--blue); font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 6px; }
+  .hero h1 { font-size: 28px; margin: 0 0 6px; }
+  .hero p.sub { color: var(--text-secondary); margin: 0; font-size: 14.5px; }
+
+  .section-title { font-size: 15px; margin: 30px 0 4px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .6px; font-weight: 700; }
+  .rule-note { color: var(--text-muted); font-size: 12.5px; margin: 4px 0 18px; }
+
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 18px; overflow: hidden; }
+  .sum-item { padding: 14px 18px; border-right: 1px solid var(--border); }
+  .sum-item:last-child { border-right: none; }
+  .sum-item .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .6px; color: var(--text-muted); margin: 0 0 5px; }
+  .sum-item .value { font-size: 21px; font-weight: 700; margin: 0; font-family: 'IBM Plex Mono', monospace; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); margin-bottom: 18px; }
+  .card h2 { font-size: 15px; margin: 0 0 4px; }
+  .card p.sub { color: var(--text-secondary); font-size: 12.5px; margin: 0 0 14px; }
   .chartbox svg { width: 100%; display: block; overflow: visible; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
-  @media (max-width: 900px) { .grid2, .kpis { grid-template-columns: 1fr; } }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 900px) { .grid2, .summary { grid-template-columns: 1fr; } }
+
+  .filterbar { position: sticky; top: 61px; z-index: 90; background: var(--bg); padding: 12px 0; margin-bottom: 18px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+  .filtergroup { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .filtergroup .lbl { color: var(--text-muted); font-size: 12px; margin-right: 2px; font-weight: 600; }
+  .filterrow { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+  .chip { display: inline-block; border-radius: 999px; padding: 6px 13px; font-weight: 600; font-size: 12.5px; cursor: pointer; white-space: nowrap; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); }
+  .chip.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+  #search { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; color: var(--text); font-size: 13px; min-width: 220px; font-family: inherit; }
+
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--muted); position: sticky; top: 0; background: var(--bg); cursor: pointer; }
-  th.active { color: var(--orange); }
+  th { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); position: sticky; top: 0; background: var(--surface); cursor: pointer; font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; }
+  th.active { color: var(--blue); }
   td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
   .tablewrap { overflow-x: auto; }
   .tablewrap.scroll { max-height: 520px; overflow-y: auto; }
-  .btn { margin-top: 12px; background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px; font-size: 12px; cursor: pointer; }
-  .meta-row { display: flex; gap: 20px; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
-  footer { color: var(--muted); font-size: 12px; margin-top: 10px; }
+  .btn { margin-top: 12px; background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-family: inherit; }
+  .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 700; border: 1px solid; }
+  .badge.red { color: var(--red); border-color: var(--red); background: color-mix(in srgb, var(--red) 12%, transparent); }
+  .meta-row { display: flex; gap: 20px; font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+  footer { text-align: center; color: var(--text-muted); font-size: 12px; padding: 30px 0; }
 </style>
 </head>
 <body>
 
-<header style="margin-bottom:24px;">
-  <h1>Análise de Horas Fora da Operação</h1>
-  <p class="sub" id="headerSub"></p>
+<header class="top">
+  <div class="brand">Cockpit Operação<small>Horas fora da operação · armazém</small></div>
+  <button class="icon-btn" id="themeBtn">🌙</button>
 </header>
 
-<div class="panel">
-  <h2>Visão Geral do Mês</h2>
-  <p class="sub" style="margin-bottom:14px">Agosto/2026 · inclui dias sem quebra por turno/escala/pessoa (ver nota abaixo)</p>
-  <section class="kpis" style="grid-template-columns:repeat(3,1fr); margin-bottom:20px">
-    <div class="kpi"><p class="lbl">Total de Horas Fora (mês)</p><p class="val" id="kpiMonthTotal" style="color:var(--red)"></p></div>
-    <div class="kpi"><p class="lbl">Dias no Mês</p><p class="val" style="color:var(--green)">30</p></div>
-    <div class="kpi"><p class="lbl">Dias com Detalhamento Completo</p><p class="val" id="kpiDetailDays" style="color:var(--blue)"></p></div>
+<main>
+  <section class="hero">
+    <p class="eyebrow">Armazém · Agosto/2026</p>
+    <h1>Análise de Horas Fora da Operação</h1>
+    <p class="sub" id="headerSub"></p>
   </section>
-  <div class="chartbox" id="chartMonth"></div>
-  <p class="sub" id="pivotNote" style="margin-top:14px"></p>
-</div>
 
-<h2 style="margin:8px 0 4px">Detalhamento (dias com registro completo)</h2>
-<p class="sub" id="detailScopeNote" style="margin-bottom:18px"></p>
-
-<div class="filterbar">
-  <div class="filterrow">
-    <div class="filtergroup"><span class="lbl">Turno:</span><span id="f-turno"></span></div>
-    <div class="filtergroup"><span class="lbl">Escala:</span><span id="f-escala"></span></div>
-    <div class="filtergroup"><span class="lbl">Status:</span><span id="f-status"></span></div>
+  <div class="card">
+    <h2>Visão Geral do Mês</h2>
+    <p class="sub">Agosto/2026 · inclui dias sem quebra por turno/escala/pessoa (ver nota abaixo)</p>
+    <div class="summary" style="margin-bottom:16px">
+      <div class="sum-item"><p class="label">Total de Horas Fora (mês)</p><p class="value" id="kpiMonthTotal" style="color:var(--red)"></p></div>
+      <div class="sum-item"><p class="label">Dias no Mês</p><p class="value" style="color:var(--green)">30</p></div>
+      <div class="sum-item"><p class="label">Dias com Detalhamento Completo</p><p class="value" id="kpiDetailDays" style="color:var(--blue)"></p></div>
+    </div>
+    <div class="chartbox" id="chartMonth"></div>
+    <p class="rule-note" id="pivotNote" style="margin-top:14px"></p>
   </div>
-  <div class="filterrow">
-    <div class="filtergroup"><span class="lbl">Liderança:</span><span id="f-lideranca"></span></div>
-    <input id="search" placeholder="Buscar pessoa..." />
+
+  <p class="section-title">Detalhamento (dias com registro completo)</p>
+  <p class="rule-note" id="detailScopeNote"></p>
+
+  <div class="filterbar">
+    <div class="filterrow">
+      <div class="filtergroup"><span class="lbl">Turno</span><span id="f-turno"></span></div>
+      <div class="filtergroup"><span class="lbl">Escala</span><span id="f-escala"></span></div>
+      <div class="filtergroup"><span class="lbl">Status</span><span id="f-status"></span></div>
+    </div>
+    <div class="filterrow">
+      <div class="filtergroup"><span class="lbl">Liderança</span><span id="f-lideranca"></span></div>
+      <input id="search" placeholder="Buscar pessoa..." />
+    </div>
   </div>
-</div>
 
-<section class="kpis">
-  <div class="kpi"><p class="lbl">Total de Horas Fora</p><p class="val" id="kpiTotal" style="color:var(--red)"></p></div>
-  <div class="kpi"><p class="lbl">Ocorrências</p><p class="val" id="kpiOcorrencias" style="color:var(--amber)"></p></div>
-  <div class="kpi"><p class="lbl">Pessoas Impactadas</p><p class="val" id="kpiPessoas" style="color:var(--blue)"></p></div>
-  <div class="kpi"><p class="lbl">Média por Ocorrência</p><p class="val" id="kpiMedia" style="color:var(--orange)"></p></div>
-  <div class="kpi"><p class="lbl">Dias Analisados</p><p class="val" id="kpiDias" style="color:var(--green)"></p></div>
-</section>
-
-<div class="panel">
-  <h2>Evolução Diária (dias com detalhe)</h2>
-  <p class="sub" style="margin-bottom:14px">Total de horas fora da operação por dia</p>
-  <div class="chartbox" id="chartDia"></div>
-</div>
-
-<div class="grid2">
-  <div class="panel">
-    <h2>Por Turno</h2>
-    <p class="sub" id="turnoSub" style="margin-bottom:14px"></p>
-    <div class="chartbox" id="chartTurno"></div>
+  <div class="summary">
+    <div class="sum-item"><p class="label">Total de Horas Fora</p><p class="value" id="kpiTotal" style="color:var(--red)"></p></div>
+    <div class="sum-item"><p class="label">Ocorrências</p><p class="value" id="kpiOcorrencias" style="color:var(--amber)"></p></div>
+    <div class="sum-item"><p class="label">Pessoas Impactadas</p><p class="value" id="kpiPessoas" style="color:var(--blue)"></p></div>
+    <div class="sum-item"><p class="label">Média por Ocorrência</p><p class="value" id="kpiMedia"></p></div>
+    <div class="sum-item"><p class="label">Dias Analisados</p><p class="value" id="kpiDias" style="color:var(--green)"></p></div>
   </div>
-  <div class="panel">
-    <h2>Por Escala</h2>
-    <p class="sub" style="margin-bottom:14px">Total de horas fora por tipo de escala</p>
-    <div class="chartbox" id="chartEscala"></div>
-  </div>
-</div>
 
-<div class="panel">
-  <h2>Por Liderança</h2>
-  <p class="sub" style="margin-bottom:14px">Total de horas fora por líder responsável — clique numa barra para filtrar</p>
-  <div class="chartbox" id="chartLideranca"></div>
-  <button class="btn" id="clearLideranca" style="display:none">Limpar filtro de liderança</button>
-</div>
-
-<div class="panel">
-  <h2>Top 10 Áreas / Times</h2>
-  <p class="sub" style="margin-bottom:14px">Áreas com mais horas fora da operação registradas</p>
-  <div class="chartbox" id="chartArea"></div>
-</div>
-
-<div class="panel">
-  <h2>Ranking por Liderança</h2>
-  <p class="sub" style="margin-bottom:14px">Resumo consolidado por líder</p>
-  <div class="tablewrap">
-    <table>
-      <thead><tr><th>Liderança</th><th>Pessoas</th><th>Horas Fora</th><th>% do Total</th><th>Média h/Pessoa</th><th>Top Ofensor</th></tr></thead>
-      <tbody id="tblLideranca"></tbody>
-    </table>
+  <div class="card">
+    <h2>Evolução Diária (dias com detalhe)</h2>
+    <p class="sub">Total de horas fora da operação por dia</p>
+    <div class="chartbox" id="chartDia"></div>
   </div>
-</div>
 
-<div class="panel">
-  <h2>Detalhamento por Pessoa</h2>
-  <p class="sub" id="pessoaSubtitle" style="margin-bottom:14px">Ocorrências, horas fora e frequência individual (nomes anonimizados — primeiro nome + inicial do sobrenome)</p>
-  <div class="meta-row">
-    <span id="pessoaCount"></span>
-    <span>Clique no cabeçalho para ordenar</span>
+  <div class="grid2">
+    <div class="card">
+      <h2>Por Turno</h2>
+      <p class="sub" id="turnoSub"></p>
+      <div class="chartbox" id="chartTurno"></div>
+    </div>
+    <div class="card">
+      <h2>Por Escala</h2>
+      <p class="sub">Total de horas fora por tipo de escala</p>
+      <div class="chartbox" id="chartEscala"></div>
+    </div>
   </div>
-  <div class="tablewrap scroll">
-    <table>
-      <thead><tr id="pessoaHead"></tr></thead>
-      <tbody id="tblPessoa"></tbody>
-    </table>
+
+  <div class="card">
+    <h2>Por Liderança</h2>
+    <p class="sub">Total de horas fora por líder responsável — clique numa barra para filtrar</p>
+    <div class="chartbox" id="chartLideranca"></div>
+    <button class="btn" id="clearLideranca" style="display:none">Limpar filtro de liderança</button>
   </div>
-  <button class="btn" id="showMore"></button>
-</div>
+
+  <div class="card">
+    <h2>Top 10 Áreas / Times</h2>
+    <p class="sub">Áreas com mais horas fora da operação registradas</p>
+    <div class="chartbox" id="chartArea"></div>
+  </div>
+
+  <div class="card">
+    <h2>Ranking por Liderança</h2>
+    <p class="sub">Resumo consolidado por líder</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Liderança</th><th>Pessoas</th><th>Horas Fora</th><th>% do Total</th><th>Média h/Pessoa</th><th>Top Ofensor</th></tr></thead>
+        <tbody id="tblLideranca"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Detalhamento por Pessoa</h2>
+    <p class="sub" id="pessoaSubtitle"></p>
+    <div class="meta-row">
+      <span id="pessoaCount"></span>
+      <span>Clique no cabeçalho para ordenar</span>
+    </div>
+    <div class="tablewrap scroll">
+      <table>
+        <thead><tr id="pessoaHead"></tr></thead>
+        <tbody id="tblPessoa"></tbody>
+      </table>
+    </div>
+    <button class="btn" id="showMore"></button>
+  </div>
+</main>
 
 <footer>Dados anonimizados · fonte: planilha interna de operação do armazém</footer>
 
@@ -7507,7 +7556,45 @@
 }</script>
 <script>
 const RAW = JSON.parse(document.getElementById('raw-data').textContent);
-const COLORS = { bg:'#020617', panel:'#0f172a', border:'#1e293b', orange:'#fb923c', blue:'#38bdf8', green:'#22c55e', amber:'#f59e0b', red:'#f87171', text:'#cbd5e1', muted:'#94a3b8' };
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+const COLORS = {};
+function refreshColors(){
+  COLORS.bg = cssVar('--bg');
+  COLORS.surface = cssVar('--surface');
+  COLORS.border = cssVar('--border');
+  COLORS.blue = cssVar('--blue');
+  COLORS.green = cssVar('--green');
+  COLORS.amber = cssVar('--amber');
+  COLORS.red = cssVar('--red');
+  COLORS.text = cssVar('--text');
+  COLORS.muted = cssVar('--text-muted');
+  COLORS.orange = COLORS.blue;
+  COLORS.panel = COLORS.surface;
+}
+refreshColors();
+
+function isDarkNow(){
+  const attr = document.documentElement.getAttribute('data-theme');
+  if (attr === 'light') return false;
+  if (attr === 'dark') return true;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+function initTheme(){
+  let saved = null;
+  try { saved = localStorage.getItem('theme'); } catch (e) {}
+  if (saved === 'light' || saved === 'dark') document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').textContent = isDarkNow() ? '☀️' : '🌙';
+}
+document.getElementById('themeBtn').onclick = () => {
+  const next = isDarkNow() ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+  document.getElementById('themeBtn').textContent = isDarkNow() ? '☀️' : '🌙';
+  refreshColors();
+  render();
+};
+initTheme();
+
 const TURNO_LABELS = { '1T':'1º Turno', '1TE':'1º Turno Estendido', '2T':'2º Turno', 'ADM':'Administrativo' };
 function turnoLabel(t){ return TURNO_LABELS[t] || t; }
 
@@ -7778,16 +7865,16 @@ function render(){
   }
 }
 
-function renderChips(containerId, values, activeSet, colorClass, labelFn){
+function renderChips(containerId, values, activeSet, labelFn){
   const el = document.getElementById(containerId);
   el.innerHTML = '';
   values.forEach(v => {
     const span = document.createElement('span');
-    span.className = 'chip' + (activeSet.has(v) ? ' '+colorClass : '');
+    span.className = 'chip' + (activeSet.has(v) ? ' active' : '');
     span.textContent = labelFn ? labelFn(v) : v;
     span.onclick = () => {
       if (activeSet.has(v)) activeSet.delete(v); else activeSet.add(v);
-      renderChips(containerId, values, activeSet, colorClass, labelFn);
+      renderChips(containerId, values, activeSet, labelFn);
       render();
     };
     el.appendChild(span);
@@ -7803,16 +7890,16 @@ document.getElementById('pivotNote').textContent = `Os dias ${PIVOT_ONLY_DAYS.ma
 document.getElementById('detailScopeNote').textContent = `Turno, escala, liderança e pessoa · ${DETAIL_DAYS_COUNT} dias (11 a 27/08 e 29–30/08)`;
 document.getElementById('pessoaSubtitle').textContent = `Ocorrências, horas fora e frequência individual · frequência = ocorrências / ${DETAIL_DAYS_COUNT} dias com detalhe (nomes anonimizados)`;
 
-renderChips('f-turno', ALL_TURNOS, state.turnos, 'active-orange', turnoLabel);
-renderChips('f-escala', ALL_ESCALAS, state.escalas, 'active-blue');
-renderChips('f-status', ALL_STATUS, state.status, 'active-green');
-renderChips('f-lideranca', ALL_LIDERANCAS, state.liderancas, 'active-amber');
+renderChips('f-turno', ALL_TURNOS, state.turnos, turnoLabel);
+renderChips('f-escala', ALL_ESCALAS, state.escalas);
+renderChips('f-status', ALL_STATUS, state.status);
+renderChips('f-lideranca', ALL_LIDERANCAS, state.liderancas);
 
 document.getElementById('search').addEventListener('input', (e) => { state.search = e.target.value; state.visibleCount = 25; render(); });
 document.getElementById('showMore').addEventListener('click', () => { state.visibleCount += 25; render(); });
 document.getElementById('clearLideranca').addEventListener('click', () => {
   state.liderancas = new Set(ALL_LIDERANCAS);
-  renderChips('f-lideranca', ALL_LIDERANCAS, state.liderancas, 'active-amber');
+  renderChips('f-lideranca', ALL_LIDERANCAS, state.liderancas);
   render();
 });
 
